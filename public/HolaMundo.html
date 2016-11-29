@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	
+</head>
+<body >
+
+	<h1 id="HolaMundo"></h1>
+
+	<input type="button" onClick="Actualizar()" value="Actualizar Datos"></input>
+	<input type="button" onClick="MostrarDatos()" value="Mostrar Datos"></input>
+	<div id="divDatos" style="display:none;">
+		<p>Nombre: <span id="name"></span></p>
+		<p>Curso: <span id="curso"></span></p>
+		<p>Calificación: <span id="calificacion"></span></p>
+	</div>
+
+	<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
+	<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyCvm3y7XyB0-DEpqZg3KNUYDRaV-wVot8o",
+	    authDomain: "holamundo-38533.firebaseapp.com",
+	    databaseURL: "https://holamundo-38533.firebaseio.com",
+	    storageBucket: "holamundo-38533.appspot.com",
+	    messagingSenderId: "712365375887"
+	  };
+	  firebase.initializeApp(config);
+
+	  //leemos de la BBDD
+	  var ref = firebase.database().ref().child('prueba');
+	  ref.on('value', function(snap){
+	  	document.getElementById("HolaMundo").textContent = snap.val();
+	  });
+
+	  //escribimos en la BBDD
+	  var refW = firebase.database().ref().child('Alumno');
+	  var alumno = {
+	  	nombre: "Pepito Perez",
+	  	clase: "6º EGB",
+	  	nota: "Apto"
+	  };
+
+	  refW.set(alumno);
+
+	  function Actualizar(){
+	  	var alumno = {
+	  		nombre: "Pablo Marlo"	  	
+	  	};
+	  	refW.update(alumno);
+	  }
+
+	function MostrarDatos(){
+		var refAlumno = firebase.database().ref().child('Alumno');
+	  	refAlumno.on('value', function(snap){
+	  		document.getElementById("name").textContent = snap.val().nombre;
+	  		document.getElementById("curso").textContent = snap.val().clase;
+	  		document.getElementById("calificacion").textContent = snap.val().nota;
+	  	});
+
+	  	obj = document.getElementById("divDatos");
+	  	obj.style.display = (obj.style.display=='none') ? 'block' : 'none';
+
+	}
+	</script>
+</body>
+
+	
+
+
+</html>
